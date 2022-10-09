@@ -250,7 +250,9 @@ func (c *socks5Connector) ConnectContext(ctx context.Context, conn net.Conn, net
 	}
 	p, _ := strconv.Atoi(port)
 	req := gosocks5.NewRequest(gosocks5.CmdConnect, &gosocks5.Addr{
-		Type: gosocks5.AddrDomain,
+		// AGORA: 将这里的 AddrDomain 改成 AddrIPv4 以适配 s4 接入;
+		//Type: gosocks5.AddrDomain,
+		Type: gosocks5.AddrIPv4,
 		Host: host,
 		Port: uint16(p),
 	})
