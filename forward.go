@@ -106,7 +106,9 @@ func (h *tcpDirectForwardHandler) Init(options ...HandlerOption) {
 func (h *tcpDirectForwardHandler) Handle(conn net.Conn) {
 	defer conn.Close()
 
-	log.Logf("[tcp] %s - %s", conn.RemoteAddr(), conn.LocalAddr())
+	if Debug {
+		log.Logf("[tcp] %s - %s", conn.RemoteAddr(), conn.LocalAddr())
+	}
 
 	retries := 1
 	if h.options.Chain != nil && h.options.Chain.Retries > 0 {
@@ -150,9 +152,13 @@ func (h *tcpDirectForwardHandler) Handle(conn net.Conn) {
 	if addr == "" {
 		addr = conn.LocalAddr().String()
 	}
-	log.Logf("[tcp] %s <-> %s", conn.RemoteAddr(), addr)
+	if Debug {
+		log.Logf("[tcp] %s <-> %s", conn.RemoteAddr(), addr)
+	}
 	transport(conn, cc)
-	log.Logf("[tcp] %s >-< %s", conn.RemoteAddr(), addr)
+	if Debug {
+		log.Logf("[tcp] %s >-< %s", conn.RemoteAddr(), addr)
+	}
 }
 
 type udpDirectForwardHandler struct {
